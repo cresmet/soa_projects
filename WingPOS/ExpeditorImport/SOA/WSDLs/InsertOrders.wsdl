@@ -1,0 +1,28 @@
+<wsdl:definitions
+     name="InsertOrders"
+     targetNamespace="http://xmlns.oracle.com/pcbpel/adapter/db/WingPOS/ExpeditorImport/InsertOrders"
+     xmlns:tns="http://xmlns.oracle.com/pcbpel/adapter/db/WingPOS/ExpeditorImport/InsertOrders"
+     xmlns:jca="http://xmlns.oracle.com/pcbpel/wsdl/jca/"
+     xmlns:plt="http://schemas.xmlsoap.org/ws/2003/05/partner-link/"
+     xmlns:top="http://xmlns.oracle.com/pcbpel/adapter/db/top/InsertOrders"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+    >
+  <plt:partnerLinkType name="InsertOrders_plt" >
+    <plt:role name="InsertOrders_role" >
+      <plt:portType name="tns:InsertOrders_ptt" />
+    </plt:role>
+  </plt:partnerLinkType>
+    <wsdl:types>
+      <schema xmlns="http://www.w3.org/2001/XMLSchema" >
+        <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/top/InsertOrders" schemaLocation="../Schemas/InsertOrders_table.xsd" />
+      </schema>
+    </wsdl:types>
+    <wsdl:message name="SbcExpeditorStgTblCollection_msg">
+        <wsdl:part name="SbcExpeditorStgTblCollection" element="top:SbcExpeditorStgTblCollection"/>
+    </wsdl:message>
+    <wsdl:portType name="InsertOrders_ptt">
+        <wsdl:operation name="insert">
+            <wsdl:input message="tns:SbcExpeditorStgTblCollection_msg"/>
+        </wsdl:operation>
+    </wsdl:portType>
+</wsdl:definitions>

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions
+     name="CommonErrorProcess"
+     targetNamespace="http://ibd.specialized.com/IM/CommonErrorProcess"
+     xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/"
+     xmlns:client="http://ibd.specialized.com/IM/CommonErrorProcess"
+     xmlns:ns1="http://schema.ibd.specialized.com/Common/CommonError"
+     xmlns:plnk="http://docs.oasis-open.org/wsbpel/2.0/plnktype"
+     xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+    >
+    <wsdl:documentation>
+        <abstractWSDL>http://t52app14zn1.specialized.com:7004/soa-infra/services/IM/CommonErrorHandler!1.0-SNAPSHOT/WSDLs/CommonErrorProcess.wsdl</abstractWSDL>
+    </wsdl:documentation>
+    <plnk:partnerLinkType name="CommonErrorProcess">
+        <plnk:role name="CommonErrorProcessProvider" portType="client:CommonErrorProcess"/>
+    </plnk:partnerLinkType>
+    <wsdl:types>
+        <schema xmlns="http://www.w3.org/2001/XMLSchema">
+            <import namespace="http://schema.ibd.specialized.com/Common/CommonError"
+                    schemaLocation="../Schemas/CommonError.xsd"/>
+        </schema>
+    </wsdl:types>
+    <wsdl:message name="CommonErrorProcessRequestMessage">
+        <wsdl:part name="payload" element="ns1:LogRequest"/>
+    </wsdl:message>
+    <wsdl:message name="CommonErrorProcessResponseMessage">
+        <wsdl:part name="payload" element="ns1:LogResponse"/>
+    </wsdl:message>
+    <wsdl:portType name="CommonErrorProcess">
+        <wsdl:operation name="process">
+            <wsdl:input message="client:CommonErrorProcessRequestMessage"/>
+            <wsdl:output message="client:CommonErrorProcessResponseMessage"/>
+        </wsdl:operation>
+    </wsdl:portType>
+    <wsdl:binding name="CommonErrorProcessBinding" type="client:CommonErrorProcess">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <wsdl:operation name="process">
+            <soap:operation style="document" soapAction="process"/>
+            <wsdl:input>
+                <soap:body use="literal"/>
+            </wsdl:input>
+            <wsdl:output>
+                <soap:body use="literal"/>
+            </wsdl:output>
+        </wsdl:operation>
+    </wsdl:binding>
+    <wsdl:service name="commonerrorprocess_client_ep">
+        <wsdl:port name="CommonErrorProcess_pt" binding="client:CommonErrorProcessBinding">
+            <soap:address location="http://t52app14zn1.specialized.com:7004/soa-infra/services/IM/CommonErrorHandler!1.0-SNAPSHOT*soa_7f0b0187-edd3-4683-9cb1-c0352216abee/commonerrorprocess_client_ep"/>
+        </wsdl:port>
+    </wsdl:service>
+</wsdl:definitions>

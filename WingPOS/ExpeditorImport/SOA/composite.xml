@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Generated from Oracle SOA Archetype version 12.1.3.0.0  -->
+<composite name="ExpeditorImport"
+           revision="1.0-SNAPSHOT"
+           label="2013-10-14_14-36-17_928"
+           mode="active"
+           state="on"
+           xmlns="http://xmlns.oracle.com/sca/1.0"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           xmlns:wsp="http://schemas.xmlsoap.org/ws/2004/09/policy"
+           xmlns:orawsp="http://schemas.oracle.com/ws/2006/01/policy"
+           xmlns:ui="http://xmlns.oracle.com/soa/designer/"
+           xmlns:sca-ext="http://xmlns.oracle.com/sca/1.0-ext">
+  <import namespace="http://xmlns.oracle.com/WingPOS/ExpeditorImport/Order" location="WSDLs/Order.wsdl"
+          importType="wsdl"/>
+  <import namespace="http://ibd.specialized.com/WingPOS/ExpeditorImport/ExpeditorImportProcess"
+          location="WSDLs/ExpeditorImportProcess.wsdl" importType="wsdl"/>
+  <import namespace="http://xmlns.oracle.com/pcbpel/adapter/db/WingPOS/ExpeditorImport/InsertOrders"
+          location="WSDLs/InsertOrders.wsdl" importType="wsdl"/>
+  <import namespace="http://ibd.specialized.com/IM/CommonErrorProcess"
+          location="WSDLs/commonerrorprocess_client_ep.wsdl" importType="wsdl"/>
+  <import namespace="http://ibd.specialized.com/IM/CommonErrorProcess"
+          location="http://t52app14zn1.specialized.com:7004/soa-infra/services/IM/CommonErrorHandler!1.0-SNAPSHOT/WSDLs/CommonErrorProcess.wsdl"
+          importType="wsdl"/>
+  <import namespace="http://xmlns.oracle.com/WingPOS/ExpeditorImport/OrderPicking" location="WSDLs/OrderPicking.wsdl"
+          importType="wsdl"/>
+  <service name="expeditorimportprocess_client_ep" ui:wsdlLocation="WSDLs/ExpeditorImportProcess.wsdl">
+    <interface.wsdl interface="http://ibd.specialized.com/WingPOS/ExpeditorImport/ExpeditorImportProcess#wsdl.interface(ExpeditorImportProcess)"
+                    callbackInterface="http://ibd.specialized.com/WingPOS/ExpeditorImport/ExpeditorImportProcess#wsdl.interface(ExpeditorImportProcessCallback)"/>
+    <binding.ws port="http://ibd.specialized.com/WingPOS/ExpeditorImport/ExpeditorImportProcess#wsdl.endpoint(expeditorimportprocess_client_ep/ExpeditorImportProcess_pt)"/>
+    <callback>
+      <binding.ws port="http://ibd.specialized.com/WingPOS/ExpeditorImport/ExpeditorImportProcess#wsdl.endpoint(expeditorimportprocess_client_ep/ExpeditorImportProcessCallback_pt)"/>
+    </callback>
+  </service>
+  <property name="productVersion" type="xs:string" many="false">12.1.3.0.0</property>
+  <component name="ExpeditorImportProcess" version="2.0">
+    <implementation.bpel src="BPEL/ExpeditorImportProcess.bpel"/>
+    <componentType>
+      <service name="expeditorimportprocess_client" ui:wsdlLocation="WSDLs/ExpeditorImportProcess.wsdl">
+        <interface.wsdl interface="http://ibd.specialized.com/WingPOS/ExpeditorImport/ExpeditorImportProcess#wsdl.interface(ExpeditorImportProcess)"
+                        callbackInterface="http://ibd.specialized.com/WingPOS/ExpeditorImport/ExpeditorImportProcess#wsdl.interface(ExpeditorImportProcessCallback)"/>
+      </service>
+      <reference name="Order" ui:wsdlLocation="WSDLs/Order.wsdl">
+        <interface.wsdl interface="http://xmlns.oracle.com/WingPOS/ExpeditorImport/Order#wsdl.interface(Order_ptt)"/>
+      </reference>
+      <reference name="InsertOrders" ui:wsdlLocation="WSDLs/InsertOrders.wsdl">
+        <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/WingPOS/ExpeditorImport/InsertOrders#wsdl.interface(InsertOrders_ptt)"/>
+      </reference>
+      <reference name="WriteLog"
+                 ui:wsdlLocation="http://t52app14zn1.specialized.com:7004/soa-infra/services/IM/CommonErrorHandler!1.0-SNAPSHOT/WSDLs/CommonErrorProcess.wsdl">
+        <interface.wsdl interface="http://ibd.specialized.com/IM/CommonErrorProcess#wsdl.interface(CommonErrorProcess)"/>
+      </reference>
+      <reference name="OrderPicking" ui:wsdlLocation="WSDLs/OrderPicking.wsdl">
+        <interface.wsdl interface="http://xmlns.oracle.com/WingPOS/ExpeditorImport/OrderPicking#wsdl.interface(OrderPicking_ptt)"/>
+      </reference>
+    </componentType>
+    <property name="bpel.config.oneWayDeliveryPolicy" type="xs:string" many="false">async.persist</property>
+    <property name="configuration.sensorLocation" type="xs:string" many="false">BPEL/ExpeditorImportProcess_sensor.xml</property>
+    <property name="configuration.sensorActionLocation" type="xs:string" many="false">BPEL/ExpeditorImportProcess_sensorAction.xml</property>
+  </component>
+  <reference name="Order" ui:wsdlLocation="WSDLs/Order.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/WingPOS/ExpeditorImport/Order#wsdl.interface(Order_ptt)"/>
+    <binding.rest config="Adapters/Order.wadl" location="http://api.specialized.shoptao.cn"/>
+  </reference>
+  <reference name="InsertOrders" ui:wsdlLocation="WSDLs/InsertOrders.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/pcbpel/adapter/db/WingPOS/ExpeditorImport/InsertOrders#wsdl.interface(InsertOrders_ptt)"/>
+    <binding.jca config="Adapters/InsertOrders_db.jca"/>
+    <property name="jca.retry.count" type="xs:int" many="false" override="may">4</property>
+    <property name="jca.retry.interval" type="xs:int" many="false" override="may">1</property>
+    <property name="jca.retry.backoff" type="xs:int" many="false" override="may">2</property>
+    <property name="jca.retry.maxInterval" type="xs:int" many="false" override="may">120</property>
+  </reference>
+  <reference name="WriteLog" ui:wsdlLocation="WSDLs/commonerrorprocess_client_ep.wsdl">
+    <interface.wsdl interface="http://ibd.specialized.com/IM/CommonErrorProcess#wsdl.interface(CommonErrorProcess)"/>
+    <binding.ws port="http://ibd.specialized.com/IM/CommonErrorProcess#wsdl.endpoint(commonerrorprocess_client_ep/CommonErrorProcess_pt)"
+                location="http://t52app14zn1.specialized.com:7004/soa-infra/services/IM/CommonErrorHandler!1.0-SNAPSHOT/commonerrorprocess_client_ep?WSDL"
+                soapVersion="1.1">
+      <property name="weblogic.wsee.wsat.transaction.flowOption" type="xs:string" many="false">WSDLDriven</property>
+    </binding.ws>
+  </reference>
+  <reference name="OrderPicking" ui:wsdlLocation="WSDLs/OrderPicking.wsdl">
+    <interface.wsdl interface="http://xmlns.oracle.com/WingPOS/ExpeditorImport/OrderPicking#wsdl.interface(OrderPicking_ptt)"/>
+    <binding.rest config="Adapters/OrderPicking.wadl" location="http://api.specialized.shoptao.cn"/>
+  </reference>
+  <wire>
+    <source.uri>expeditorimportprocess_client_ep</source.uri>
+    <target.uri>ExpeditorImportProcess/expeditorimportprocess_client</target.uri>
+  </wire>
+  <wire>
+    <source.uri>ExpeditorImportProcess/Order</source.uri>
+    <target.uri>Order</target.uri>
+  </wire>
+  <wire>
+    <source.uri>ExpeditorImportProcess/InsertOrders</source.uri>
+    <target.uri>InsertOrders</target.uri>
+  </wire>
+  <wire>
+    <source.uri>ExpeditorImportProcess/WriteLog</source.uri>
+    <target.uri>WriteLog</target.uri>
+  </wire>
+  <wire>
+    <source.uri>ExpeditorImportProcess/OrderPicking</source.uri>
+    <target.uri>OrderPicking</target.uri>
+  </wire>
+</composite>

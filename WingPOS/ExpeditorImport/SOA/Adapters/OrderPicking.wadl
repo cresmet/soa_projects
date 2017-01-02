@@ -1,0 +1,27 @@
+<?xml version = '1.0' encoding = 'UTF-8'?>
+<application xmlns:soa="http://www.oracle.com/soa/rest" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:tns="http://xmlns.oracle.com/WingPOS/ExpeditorImport/OrderPicking" xmlns="http://wadl.dev.java.net/2009/02">
+   <doc title="OrderPicking">RestReference</doc>
+   <grammars>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:import namespace="http://schema.ibd.specialized.com/OrderPicking_pickOrder_request"
+                        schemaLocation="../Schemas/wingpos_pick_request.xsd"/>
+        </xsd:schema>
+      <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+            <xsd:import namespace="http://TargetNamespace.com/OrderPicking_pickOrder_response"
+                        schemaLocation="../Schemas/wingpos_pick_response.xsd"/>
+        </xsd:schema>
+   </grammars>
+   <resources>
+      <resource path="/api/rest/WingApi">
+         <method name="PUT" soa:wsdlOperation="pickOrder">
+            <request>
+               <representation mediaType="application/x-www-form-urlencoded" element="cns:PickRequest" xmlns:cns="http://schema.ibd.specialized.com/OrderPicking_pickOrder_request"/>
+            </request>
+            <response status="200">
+               <representation mediaType="application/xml" element="cns:PickResponse" xmlns:cns="http://TargetNamespace.com/OrderPicking_pickOrder_response"/>
+               <representation mediaType="application/json" element="cns:PickResponse" xmlns:cns="http://TargetNamespace.com/OrderPicking_pickOrder_response"/>
+            </response>
+         </method>
+      </resource>
+   </resources>
+</application>
